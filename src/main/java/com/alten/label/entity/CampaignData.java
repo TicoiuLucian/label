@@ -13,8 +13,9 @@ public class CampaignData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long dataId;
+    private Long id;
 
+    private Long dataId;
 
     private String lots;
 

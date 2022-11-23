@@ -27,6 +27,11 @@ public class Campaign {
     @OneToOne(cascade = CascadeType.ALL)
     private Metadata metadata;
 
-    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CampaignData> dataList = new ArrayList<>();
+
+    public void addCampaignDataToCampaign(CampaignData campaignData) {
+        this.dataList.add(campaignData);
+        campaignData.setCampaign(this);
+    }
 }

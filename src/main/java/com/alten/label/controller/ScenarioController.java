@@ -1,7 +1,10 @@
 package com.alten.label.controller;
 
+import com.alten.label.controller.model.CampaignDataModel;
 import com.alten.label.controller.model.CampaignModel;
 import com.alten.label.entity.Campaign;
+import com.alten.label.service.CampaignDataRepository;
+import com.alten.label.service.CampaignRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +22,11 @@ import java.time.format.DateTimeFormatter;
 @RestController
 public class ScenarioController {
 
+    @Autowired
+    private CampaignRepository campaignRepository;
+
+    @Autowired
+    private CampaignDataRepository campaignDataRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -28,9 +36,13 @@ public class ScenarioController {
 
         try {
             final String fileLocation = saveMultipartToDisk(multipartFile);
-//            Path file = ResourceUtils.getFile(fileLocation).toPath();
             CampaignModel response = objectMapper.readValue(new File(fileLocation), CampaignModel.class);
-            System.out.println(response);
+//            CampaignModel cm = new CampaignModel();
+//            cm.setId(response.getId());
+//            response.getDataList().forEach(x -> x.setCampaignModel(cm));
+
+            //            campaignDataRepository.saveAll(response.getDataList().stream().map(CampaignDataModel::toEntity).toList());
+            campaignRepository.save(response.toEntity());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
