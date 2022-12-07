@@ -1,13 +1,14 @@
 package com.alten.label.service;
 
 
+import com.alten.label.controller.model.LabelList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface LabelListService {
 
-    <T> void convertRequestBodyToJsonFile(T labelList);
+    ResponseEntity<String> convertRequestBodyToJsonFile(LabelList labelList) throws Exception;
 
     ResponseEntity<String> getLabelList(String path);
 

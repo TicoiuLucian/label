@@ -16,8 +16,8 @@ public class LabelListController {
     LabelListService labelListService;
 
     @PostMapping(value = "/import", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void upload(@RequestBody LabelList labelList) {
-        labelListService.convertRequestBodyToJsonFile(labelList);
+    public ResponseEntity<String> upload(@RequestBody LabelList labelList) throws Exception {
+        return labelListService.convertRequestBodyToJsonFile(labelList);
     }
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,9 +31,13 @@ public class LabelListController {
     }
 
     @DeleteMapping(value = "/delete")
-    public void delete(@RequestParam(name = "file_to_delete") String fileToDelete) {
-        labelListService.deleteFile(fileToDelete);
-
+    public ResponseEntity<Void> delete(@RequestParam(name = "file_to_delete") String fileToDelete) {
+        try {
+            labelListService.deleteFile(fileToDelete);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
 
