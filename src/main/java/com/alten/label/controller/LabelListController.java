@@ -5,11 +5,16 @@ import com.alten.label.controller.model.ListElement;
 import com.alten.label.controller.model.Metadata;
 import com.alten.label.controller.swagger.doc.LabelListDoc;
 import com.alten.label.service.LabelListService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -22,14 +27,29 @@ public class LabelListController implements LabelListDoc {
 
 
     @Override
-    public ResponseEntity<Void> createLabelList(@RequestBody LabelList labelList) {
-        return null;
+    public ResponseEntity<Void> createLabelList(@RequestBody LabelList labelList) throws IOException {
+
+
     }
 
     @Override
-    public ResponseEntity<Void> addListElementsToLabelList(List<ListElement> listElements) {
+    public ResponseEntity<Void> addListElementsToLabelList(List<ListElement> listElements) throws FileNotFoundException {
         //cauti fisierul in sistem
+        try (FileReader reader = new FileReader("labelList.json"))
+        {
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+     //   } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         //mapezi fisierul pe obiect (LabelList)
+        ObjectMapper mapper = new ObjectMapper();
+
+
         //adaugi listElements la LabelList
         //salvezi noul fisier
         return null;

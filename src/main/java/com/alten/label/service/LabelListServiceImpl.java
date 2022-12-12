@@ -82,4 +82,13 @@ public class LabelListServiceImpl implements LabelListService {
             throw new RestClientException("LabelList DELETE failed");
         }
     }
+
+    public void createLabelList(LabelList labelList) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File("labelList.json"), labelList);
+        } catch (Exception e) {
+            throw new IOException("Cannot create json file");
+        }
+    }
 }

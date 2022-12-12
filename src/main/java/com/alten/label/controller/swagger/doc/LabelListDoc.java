@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public interface LabelListDoc {
@@ -78,10 +80,10 @@ public interface LabelListDoc {
 
     //create json file
     @PostMapping(value = "???")
-    ResponseEntity<Void> createLabelList(@RequestBody LabelList labelList);
+    ResponseEntity<Void> createLabelList(@RequestBody LabelList labelList) throws IOException;
 
     @PostMapping(value = "???")
-    ResponseEntity<Void> addListElementsToLabelList(@RequestBody List<ListElement> listElements);
+    ResponseEntity<Void> addListElementsToLabelList(@RequestBody List<ListElement> listElements) throws FileNotFoundException;
 
     @PostMapping(value = "???")
     ResponseEntity<Void> addMetadataToLabelList(@RequestBody Metadata metadata);
