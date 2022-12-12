@@ -1,6 +1,8 @@
 package com.alten.label.service;
 
 import com.alten.label.controller.model.LabelList;
+import com.alten.label.controller.model.ListElement;
+import com.alten.label.controller.model.Metadata;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
@@ -15,45 +17,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 public class LabelListServiceImpl implements LabelListService {
 
-    public ResponseEntity<String> convertRequestBodyToJsonFile(LabelList labelList) throws Exception {
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            mapper.writeValue(new File("labelList.json"), labelList);
-        } catch (Exception e) {
-            throw new IOException("Cannot create json file");
-        }
-        File file = new File("labelList.json");
-
-        try {
-            //send json to client
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-            MultiValueMap<String, Object> body
-                    = new LinkedMultiValueMap<>();
-            body.add("file", new FileSystemResource(file));
-
-
-            HttpEntity<MultiValueMap<String, Object>> requestEntity
-                    = new HttpEntity<>(body, headers);
-
-            String serverUrl = "http://52.157.194.63:18080/labels/import";
-
-            RestTemplate restTemplate = new RestTemplate();
-            return restTemplate
-                    .postForEntity(serverUrl, requestEntity, String.class);
-        } catch (RestClientException e) {
-            throw new RestClientException("LabelList POST failed");
-        } finally {
-            Files.deleteIfExists(file.toPath());
-        }
-    }
 
     @Override
     public ResponseEntity<String> getLabelList(String path) {
@@ -80,6 +50,84 @@ public class LabelListServiceImpl implements LabelListService {
             restTemplate.delete(serverUrl);
         } catch (RestClientException e) {
             throw new RestClientException("LabelList DELETE failed");
+        }
+    }
+
+    @Override
+    public void createLabelListJsonFile(LabelList labelList) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File("Provisionning\\Labels\\LabelList-" + System.currentTimeMillis() + ".json"), labelList);
+        } catch (Exception e) {
+            throw new IOException("Cannot create json file");
+        }
+    }
+
+    @Override
+    public void addListElementsToLabelList(List<ListElement> listElements, String labelListName) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        File file = new File("Provisionning\\Labels\\" + labelListName);
+        LabelList labelList = objectMapper.readValue(file, LabelList.class);
+        labelList.getListElements().addAll(listElements);
+        objectMapper.writeValue(file, labelList);
+    }
+
+    @Override
+    public List<LabelList> getLabelLists() throws RuntimeException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return Stream.of(Objects.requireNonNull(new File("Provisionning\\Labels").listFiles()))
+                .filter(file -> !file.isDirectory())
+                .map(file -> {
+                    try {
+                        return objectMapper.readValue(file, LabelList.class);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .toList();
+    }
+
+    @Override
+    public List<String> getAllLabelListsFileName() throws RuntimeException {
+        return Stream.of(Objects.requireNonNull(new File("Provisionning\\Labels").listFiles()))
+                .filter(file -> !file.isDirectory())
+                .map(File::getName)
+                .toList();
+    }
+
+    @Override
+    public void addMetadataToLabelList(Metadata metadata, String labelListName) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        File file = new File("Provisionning\\Labels\\" + labelListName);
+        LabelList labelList = objectMapper.readValue(file, LabelList.class);
+        labelList.setMetadata(metadata);
+        objectMapper.writeValue(file, labelList);
+    }
+
+    public ResponseEntity<String> sendLabelListJsonToLabelServer(String labelListName) throws Exception {
+
+        File file = new File("Provisionning\\Labels\\" + labelListName);
+
+        try {
+            //send json to client
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            MultiValueMap<String, Object> body
+                    = new LinkedMultiValueMap<>();
+            body.add("file", new FileSystemResource(file));
+
+
+            HttpEntity<MultiValueMap<String, Object>> requestEntity
+                    = new HttpEntity<>(body, headers);
+
+            String serverUrl = "http://52.157.194.63:18080/labels/import";
+
+            RestTemplate restTemplate = new RestTemplate();
+            return restTemplate
+                    .postForEntity(serverUrl, requestEntity, String.class);
+        } catch (RestClientException e) {
+            throw new RestClientException("LabelList POST failed");
         }
     }
 }

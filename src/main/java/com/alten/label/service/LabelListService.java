@@ -2,17 +2,31 @@ package com.alten.label.service;
 
 
 import com.alten.label.controller.model.LabelList;
+import com.alten.label.controller.model.ListElement;
+import com.alten.label.controller.model.Metadata;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface LabelListService {
 
-    ResponseEntity<String> convertRequestBodyToJsonFile(LabelList labelList) throws Exception;
+    ResponseEntity<String> sendLabelListJsonToLabelServer(String labelListName) throws Exception;
 
     ResponseEntity<String> getLabelList(String path);
 
     ResponseEntity<String> getFileContent(String fileToRead);
 
     void deleteFile(String fileToDelete);
+
+    void createLabelListJsonFile(LabelList labelList) throws Exception;
+
+    void addListElementsToLabelList(List<ListElement> listElements, String labelListName) throws Exception;
+
+    List<LabelList> getLabelLists() throws RuntimeException;
+
+    List<String> getAllLabelListsFileName() throws RuntimeException;
+
+    void addMetadataToLabelList(Metadata metadata, String labelListName) throws Exception;
 }
