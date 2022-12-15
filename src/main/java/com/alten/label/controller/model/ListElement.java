@@ -1,7 +1,9 @@
 package com.alten.label.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
+@Data
 public class ListElement {
     @JsonProperty("label_id")
     private Long labelId;

@@ -7,6 +7,7 @@ import com.alten.label.controller.model.Metadata;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -29,4 +30,8 @@ public interface LabelListService {
     List<String> getAllLabelListsFileName() throws RuntimeException;
 
     void addMetadataToLabelList(Metadata metadata, String labelListName) throws Exception;
+
+    void deleteLabelList(String labelListName) throws IOException;
+
+    void deleteLabelFromLabelList(String labelListName, long labelId) throws IOException;
 }

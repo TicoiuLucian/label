@@ -17,6 +17,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -101,6 +104,22 @@ public class LabelListServiceImpl implements LabelListService {
         File file = new File("Provisionning\\Labels\\" + labelListName);
         LabelList labelList = objectMapper.readValue(file, LabelList.class);
         labelList.setMetadata(metadata);
+        objectMapper.writeValue(file, labelList);
+    }
+
+    @Override
+    public void deleteLabelList(String labelListName) throws IOException {
+        Path path
+                = Paths.get("Provisionning\\Labels\\" + labelListName);
+        Files.deleteIfExists(path);
+    }
+
+    @Override
+    public void deleteLabelFromLabelList(String labelListName, long labelId) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        File file = new File("Provisionning\\Labels\\" + labelListName);
+        LabelList labelList = objectMapper.readValue(file, LabelList.class);
+        labelList.getListElements().removeIf(elem -> elem.getLabelId().equals(labelId));
         objectMapper.writeValue(file, labelList);
     }
 

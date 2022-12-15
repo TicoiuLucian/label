@@ -3,23 +3,25 @@ package com.alten.label.controller;
 import com.alten.label.controller.model.LabelList;
 import com.alten.label.controller.model.ListElement;
 import com.alten.label.controller.model.Metadata;
+import com.alten.label.controller.swagger.doc.LabelListDoc;
 import com.alten.label.service.LabelListService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 
 @RestController
 @RequestMapping(value = "/label")
-public class LabelListController {
+public class LabelListController implements LabelListDoc {
 
     @Autowired
     LabelListService labelListService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createLabelList(@RequestBody LabelList labelList) {
         try {
             labelListService.createLabelListJsonFile(labelList);
@@ -29,7 +31,6 @@ public class LabelListController {
         }
     }
 
-    @PostMapping(value = "/list-element", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addListElementsToLabelList(@RequestBody List<ListElement> listElements,
                                                            @RequestParam(name = "label-list-name") String labelListName) {
         try {
@@ -40,17 +41,14 @@ public class LabelListController {
         }
     }
 
-    @GetMapping
     public List<LabelList> getAllLabelLists() {
         return labelListService.getLabelLists();
     }
 
-    @GetMapping(value = "/label-list-files")
     public List<String> getAllLabelListsFileName() {
         return labelListService.getAllLabelListsFileName();
     }
 
-    @PostMapping(value = "/metadata", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addMetadataToLabelList(@RequestBody Metadata metadata,
                                                        @RequestParam(name = "label-list-name") String labelListName) {
         try {
@@ -61,10 +59,29 @@ public class LabelListController {
         }
     }
 
-    @PostMapping(value = "/import", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> upload(@RequestBody String labelListName) throws Exception {
         return labelListService.sendLabelListJsonToLabelServer(labelListName);
     }
+
+    public ResponseEntity<Void> deleteLabelList(String labelListName) {
+        try {
+            labelListService.deleteLabelList(labelListName);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    public ResponseEntity<Void> deleteLalbelFromLabelList(String labelListName, long labelId) {
+        try {
+            labelListService.deleteLabelFromLabelList(labelListName, labelId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+
 //
 //    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
 //    public ResponseEntity<String> getList(@RequestParam(required = false) String path) {
