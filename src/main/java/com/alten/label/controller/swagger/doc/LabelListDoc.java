@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequestMapping(value = "/label-list")
 public interface LabelListDoc {
 
 
@@ -68,16 +69,7 @@ public interface LabelListDoc {
 //    @DeleteMapping(value = "/delete")
 //    ResponseEntity<Void> delete(@RequestParam(name = "file_to_delete") String fileToDelete);
 
-    //create json file
-//    @PostMapping(value = "???")
-//    ResponseEntity<Void> createLabelList(@RequestBody LabelList labelList);
-//
-//    @PostMapping(value = "???")
-//    ResponseEntity<Void> addListElementsToLabelList(@RequestBody List<ListElement> listElements);
-//
-//    @PostMapping(value = "???")
-//    ResponseEntity<Void> addMetadataToLabelList(@RequestBody Metadata metadata);
-//
+    //
 //    @Operation(summary = "Import a new label list")
 //    @ApiResponses(value = {
 //            @ApiResponse(responseCode = "200", description = "OK - request has succeeded",
@@ -107,7 +99,7 @@ public interface LabelListDoc {
 //                            description = "Description text")})
 //            })
 //                                  @RequestBody LabelList labelList) throws Exception;
-
+//
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> createLabelList(@RequestBody LabelList labelList);
 
@@ -118,7 +110,7 @@ public interface LabelListDoc {
     @GetMapping
     List<LabelList> getAllLabelLists();
 
-    @GetMapping(value = "/label-list-files")
+    @GetMapping(value = "/files")
     List<String> getAllLabelListsFileName();
 
     @PostMapping(value = "/metadata", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -128,9 +120,9 @@ public interface LabelListDoc {
     @PostMapping(value = "/import", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<String> upload(@RequestBody String labelListName) throws Exception;
 
-    @DeleteMapping(value = "/label-list")
+    @DeleteMapping
     ResponseEntity<Void> deleteLabelList(@RequestParam String labelListName);
 
-    @DeleteMapping(value = "/label-list/label")
+    @DeleteMapping(value = "/label")
     ResponseEntity<Void> deleteLalbelFromLabelList(@RequestParam String labelListName, @RequestParam long labelId);
 }
