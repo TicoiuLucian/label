@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -27,15 +28,6 @@ import java.util.stream.Stream;
 @Service
 public class LabelListServiceImpl implements LabelListService {
 
-
-    @Override
-    public ResponseEntity<String> getLabelList(String path) {
-        RestTemplate restTemplate = new RestTemplate();
-        String serverUrl;
-        serverUrl = path == null ? "http://52.157.194.63:18080/labels/list" : "http://52.157.194.63:18080/labels/list?path=" + path;
-
-        return restTemplate.getForEntity(serverUrl, String.class);
-    }
 
     @Override
     public ResponseEntity<String> getFileContent(String fileToRead) {
@@ -75,7 +67,6 @@ public class LabelListServiceImpl implements LabelListService {
         objectMapper.writeValue(file, labelList);
     }
 
-    @Override
     public List<LabelList> getLabelLists() throws RuntimeException {
         ObjectMapper objectMapper = new ObjectMapper();
         return Stream.of(Objects.requireNonNull(new File("Provisionning\\Labels").listFiles()))
@@ -91,11 +82,20 @@ public class LabelListServiceImpl implements LabelListService {
     }
 
     @Override
-    public List<String> getAllLabelListsFileName() throws RuntimeException {
-        return Stream.of(Objects.requireNonNull(new File("Provisionning\\Labels").listFiles()))
+    public List<String> getAllLabelListsFileName(String path) throws RuntimeException {
+        RestTemplate restTemplate = new RestTemplate();
+        String serverUrl;
+        serverUrl = "http://52.157.194.63:18080/labels/list?path=" + path;
+
+        List<String> labelLists = new ArrayList<>(Stream.of(Objects.requireNonNull(new File("Provisionning\\Labels").listFiles()))
                 .filter(file -> !file.isDirectory())
                 .map(File::getName)
-                .toList();
+                .toList());
+
+        labelLists.addAll(Objects.requireNonNull(restTemplate.getForObject(serverUrl, List.class)));
+        return labelLists;
+
+//        return restTemplate.getForEntity(serverUrl, String.class);
     }
 
     @Override

@@ -15,8 +15,6 @@ public interface LabelListService {
 
     ResponseEntity<String> sendLabelListJsonToLabelServer(String labelListName) throws Exception;
 
-    ResponseEntity<String> getLabelList(String path);
-
     ResponseEntity<String> getFileContent(String fileToRead);
 
     void deleteFile(String fileToDelete);
@@ -25,9 +23,9 @@ public interface LabelListService {
 
     void addListElementsToLabelList(List<ListElement> listElements, String labelListName) throws Exception;
 
-    List<LabelList> getLabelLists() throws RuntimeException;
+//    List<LabelList> getLabelLists() throws RuntimeException;
 
-    List<String> getAllLabelListsFileName() throws RuntimeException;
+    List<String> getAllLabelListsFileName(String path) throws RuntimeException;
 
     void addMetadataToLabelList(Metadata metadata, String labelListName) throws Exception;
 

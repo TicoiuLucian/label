@@ -40,12 +40,8 @@ public class LabelListController implements LabelListDoc {
         }
     }
 
-    public List<LabelList> getAllLabelLists() {
-        return labelListService.getLabelLists();
-    }
-
-    public List<String> getAllLabelListsFileName() {
-        return labelListService.getAllLabelListsFileName();
+    public List<String> getAllLabelListsFileName(@RequestParam String path) {
+        return labelListService.getAllLabelListsFileName(path);
     }
 
     public ResponseEntity<Void> addMetadataToLabelList(@RequestBody Metadata metadata,

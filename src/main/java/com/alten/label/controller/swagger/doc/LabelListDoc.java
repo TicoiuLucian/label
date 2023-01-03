@@ -107,11 +107,11 @@ public interface LabelListDoc {
     ResponseEntity<Void> addListElementsToLabelList(@RequestBody List<ListElement> listElements,
                                                     @RequestParam(name = "label-list-name") String labelListName);
 
-    @GetMapping
-    List<LabelList> getAllLabelLists();
+//    @GetMapping
+//    List<LabelList> getAllLabelLists();
 
     @GetMapping(value = "/files")
-    List<String> getAllLabelListsFileName();
+    List<String> getAllLabelListsFileName(@RequestParam String path);
 
     @PostMapping(value = "/metadata", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> addMetadataToLabelList(@RequestBody Metadata metadata,
