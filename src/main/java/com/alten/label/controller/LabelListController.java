@@ -72,9 +72,27 @@ public class LabelListController implements LabelListDoc {
         }
     }
 
-    public ResponseEntity<Void> deleteLalbelFromLabelList(String labelListName, long labelId) {
+    public ResponseEntity<Void> deleteLabelFromLabelList(@RequestParam String labelListName, @RequestParam Long labelId) {
         try {
             labelListService.deleteLabelFromLabelList(labelListName, labelId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    public ResponseEntity<Void> updateLabelElementParents(@RequestParam(name = "label-list-name") String labelListName, @RequestParam(name = "label-id") Long labelId, @RequestBody List<ListElement> listElement) {
+        try {
+            labelListService.updateLabelElementParents(labelListName, labelId, listElement);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    public ResponseEntity<Void> updateLabelElement(@RequestParam(name = "label-list-name") String labelListName, @RequestParam(name = "label-id") Long labelId, @RequestBody ListElement listElement) {
+        try {
+            labelListService.updateLabelElement(labelListName, labelId, listElement);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();

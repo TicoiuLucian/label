@@ -1,9 +1,14 @@
 package com.alten.label.controller.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ListElement {
     @JsonProperty("label_id")
     private Long labelId;
@@ -13,4 +18,8 @@ public class ListElement {
 
     @JsonProperty("label_desc")
     private String labelDescription;
+
+    //DAG + Hierarchical
+    @JsonProperty("label_parents")
+    private List<ListElement> labelParents = new ArrayList<>();
 }

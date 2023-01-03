@@ -123,7 +123,7 @@ public class LabelListServiceImpl implements LabelListService {
         objectMapper.writeValue(file, labelList);
     }
 
-    public ResponseEntity<String> sendLabelListJsonToLabelServer(String labelListName) throws Exception {
+    public ResponseEntity<String> sendLabelListJsonToLabelServer(String labelListName) {
 
         File file = new File("Provisionning\\Labels\\" + labelListName);
 
@@ -148,5 +148,28 @@ public class LabelListServiceImpl implements LabelListService {
         } catch (RestClientException e) {
             throw new RestClientException("LabelList POST failed");
         }
+    }
+
+    public void updateLabelElementParents(String labelListName, Long labelId, List<ListElement> listElements) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        File file = new File("Provisionning\\Labels\\" + labelListName);
+        LabelList labelList = objectMapper.readValue(file, LabelList.class);
+        labelList.getListElements().stream()
+                .filter(elem -> Objects.equals(elem.getLabelId(), labelId))
+                .forEach(elem -> elem.setLabelParents(listElements));
+        objectMapper.writeValue(file, labelList);
+    }
+
+    public void updateLabelElement(String labelListName, Long labelId, ListElement listElement) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        File file = new File("Provisionning\\Labels\\" + labelListName);
+        LabelList labelList = objectMapper.readValue(file, LabelList.class);
+        labelList.getListElements().stream()
+                .filter(elem -> Objects.equals(elem.getLabelId(), labelId))
+                .forEach(elem -> {
+                    elem.setLabelContent(listElement.getLabelContent());
+                    elem.setLabelDescription(listElement.getLabelDescription());
+                });
+        objectMapper.writeValue(file, labelList);
     }
 }

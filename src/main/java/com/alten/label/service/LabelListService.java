@@ -34,4 +34,9 @@ public interface LabelListService {
     void deleteLabelList(String labelListName) throws IOException;
 
     void deleteLabelFromLabelList(String labelListName, long labelId) throws IOException;
+
+    void updateLabelElementParents(String labelListName, Long labelId, List<ListElement> listElement) throws IOException;
+
+    void updateLabelElement(String labelListName, Long labelId, ListElement listElement) throws IOException;
+
 }

@@ -124,5 +124,11 @@ public interface LabelListDoc {
     ResponseEntity<Void> deleteLabelList(@RequestParam String labelListName);
 
     @DeleteMapping(value = "/label")
-    ResponseEntity<Void> deleteLalbelFromLabelList(@RequestParam String labelListName, @RequestParam long labelId);
+    ResponseEntity<Void> deleteLabelFromLabelList(@RequestParam String labelListName, @RequestParam Long labelId);
+
+    @PutMapping(value = "/update-label-parents")
+    ResponseEntity<Void> updateLabelElementParents(@RequestParam(name = "label-list-name") String labelListName, @RequestParam(name = "label-id") Long labelId, @RequestBody List<ListElement> listElement);
+
+    @PutMapping(value = "/update-label")
+    ResponseEntity<Void> updateLabelElement(@RequestParam(name = "label-list-name") String labelListName, @RequestParam(name = "label-id") Long labelId, @RequestBody ListElement listElement);
 }
