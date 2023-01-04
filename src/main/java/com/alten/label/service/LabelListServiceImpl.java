@@ -95,7 +95,6 @@ public class LabelListServiceImpl implements LabelListService {
         labelLists.addAll(Objects.requireNonNull(restTemplate.getForObject(serverUrl, List.class)));
         return labelLists;
 
-//        return restTemplate.getForEntity(serverUrl, String.class);
     }
 
     @Override

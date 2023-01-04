@@ -113,7 +113,7 @@ public interface LabelListDoc {
     @GetMapping(value = "/files")
     List<String> getAllLabelListsFileName(@RequestParam String path);
 
-    @PostMapping(value = "/metadata", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/metadata", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> addMetadataToLabelList(@RequestBody Metadata metadata,
                                                 @RequestParam(name = "label-list-name") String labelListName);
 
