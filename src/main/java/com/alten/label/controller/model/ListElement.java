@@ -11,7 +11,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ListElement {
     @JsonProperty("label_id")
-    private Long labelId;
+    private String labelId;
 
     @JsonProperty("label_content")
     private String labelContent;
@@ -19,7 +19,6 @@ public class ListElement {
     @JsonProperty("label_desc")
     private String labelDescription;
 
-    //DAG + Hierarchical
     @JsonProperty("label_parents")
     private List<ListElement> labelParents = new ArrayList<>();
 }

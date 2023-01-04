@@ -11,8 +11,10 @@ public class Metadata {
 
     private String owner;
 
-    private String confidentiality;
+    private Confidentiality confidentiality;
 
     private String date;
+
+    private String language;
 
 }

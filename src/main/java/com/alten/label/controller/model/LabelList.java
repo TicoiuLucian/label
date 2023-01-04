@@ -14,9 +14,7 @@ public class LabelList {
 
     private String name;
 
-    //TODO ENUM
     @JsonProperty("list_structure")
-//    @JsonEnumDefaultValue
     private ListStructure listStructure;
 
     private Metadata metadata;
