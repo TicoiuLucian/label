@@ -3,6 +3,13 @@ package com.alten.label.controller.swagger.doc;
 import com.alten.label.controller.model.LabelList;
 import com.alten.label.controller.model.ListElement;
 import com.alten.label.controller.model.Metadata;
+import com.alten.label.controller.swagger.example.LabelListExample;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -100,15 +107,27 @@ public interface LabelListDoc {
 //            })
 //                                  @RequestBody LabelList labelList) throws Exception;
 //
+
+    @Operation(summary = "Create a new label list")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - request has succeeded"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> createLabelList(@RequestBody LabelList labelList);
+    ResponseEntity<Void> createLabelList(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Create a new label list",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = LabelList.class),
+                    examples = {@ExampleObject(
+                            name = "Example 1",
+                            value = LabelListExample.LABEL_LIST_IMPORT,
+                            description = "Description text")})
+            })
+                                         @RequestBody LabelList labelList);
 
     @PostMapping(value = "/list-element", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> addListElementsToLabelList(@RequestBody List<ListElement> listElements,
                                                     @RequestParam(name = "label-list-name") String labelListName);
-
-//    @GetMapping
-//    List<LabelList> getAllLabelLists();
 
     @GetMapping(value = "/files")
     List<String> getAllLabelListsFileName(@RequestParam String path);
