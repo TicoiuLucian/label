@@ -8,10 +8,10 @@ public class LabelListExample {
                     "name": "Label_list",
                     "metadata": {
                         "owner": "Guillaume DELBARRE",
-                        "confidentiality": "public",
+                        "confidentiality": "C0",
                         "date": "2022-06-08T09:13:39+00:00"
                     },
-                    "list_structure": "simple",
+                    "list_structure": "SIMPLE",
                     "list_elements":
                     [
                         {
@@ -41,6 +41,18 @@ public class LabelListExample {
                         }
                       ]
                     }
+            """;
+
+    public static final String LABEL_LIST_ELEMENT = """
+            [
+              {
+                "label_id": "stefan",
+                "label_content": "stefan",
+                "label_desc": "stefan",
+                "label_parents": [
+                ]
+              }
+            ]
             """;
 
 }
