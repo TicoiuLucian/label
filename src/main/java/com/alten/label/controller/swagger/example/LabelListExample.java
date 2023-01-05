@@ -46,7 +46,7 @@ public class LabelListExample {
     public static final String LABEL_LIST_ELEMENT = """
             [
               {
-                "label_id": "stefan",
+                "label_id": "6",
                 "label_content": "stefan",
                 "label_desc": "stefan",
                 "label_parents": [
@@ -54,5 +54,18 @@ public class LabelListExample {
               }
             ]
             """;
+
+    public static final String LIST_ELEMENT_IMPORT = """
+        {
+                        "label_id": "1",
+                        "label_content": "Oui",
+                        "label_desc":"Je suis sûr qu'il s'agit des mêmes",
+                        "label_parents":[{
+                            "label_id": "2",
+                            "label_content": "Je pense que Oui",
+                            "label_desc": "Je suis à peu prêt sûr qu'il s'agit des mêmes"
+                        }]
+        }
+        """;
 
 }

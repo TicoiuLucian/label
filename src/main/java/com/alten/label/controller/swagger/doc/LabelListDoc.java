@@ -6,6 +6,7 @@ import com.alten.label.controller.model.Metadata;
 import com.alten.label.controller.swagger.example.LabelListExample;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -144,6 +145,25 @@ public interface LabelListDoc {
                                                     @RequestBody List<ListElement> listElements,
                                                     @Parameter(name = "label-list-name", example = "LabelList-1672836331316.json") @RequestParam(name = "label-list-name") String labelListName);
 
+    @Operation(summary = "Get label list file names")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - request has succeeded",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = String.class),
+                            examples = {@ExampleObject(
+                                    name = "200-OK",
+                                    value = "Label_list.json",
+                                    description = "Get label list file names")}),
+                    }),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = String.class),
+                            examples = {@ExampleObject(
+                                    name = "500-Internal Server Error",
+                                    value = "Internal Server Error")})
+                    })
+    })
+    @Parameter(in = ParameterIn.QUERY, name = "path", schema = @Schema(example = "Campagne_Guillaume", type = "string"))
     @GetMapping(value = "/files")
     List<String> getAllLabelListsFileName(@RequestParam String path);
 
@@ -154,11 +174,26 @@ public interface LabelListDoc {
     @PostMapping(value = "/import", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<String> upload(@RequestBody String labelListName) throws Exception;
 
+    @Operation(summary = "Delete label list")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - request has succeeded"),
+            @ApiResponse(responseCode = "404", description = "File Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
+    @Parameter(in = ParameterIn.QUERY, name = "file_to_delete", schema = @Schema(example = "LabelList-test.json", type = "string"))
     @DeleteMapping
-    ResponseEntity<Void> deleteLabelList(@RequestParam String labelListName);
+    ResponseEntity<Void> deleteLabelList(@RequestParam(name = "file_to_delete") String labelListName);
+
+    @Operation(summary = "Delete label from label list")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - request has succeeded"),
+            @ApiResponse(responseCode = "404", description = "File Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
 
     @DeleteMapping(value = "/label")
-    ResponseEntity<Void> deleteLabelFromLabelList(@RequestParam String labelListName, @RequestParam Long labelId);
+    ResponseEntity<Void> deleteLabelFromLabelList(@Parameter(name = "labelListName", example = "LabelList-1672836931261.json") @RequestParam String labelListName,
+                                                  @Parameter(name = "labelId", example = "2") @RequestParam Long labelId);
 
     @PutMapping(value = "/update-label-parents")
     ResponseEntity<Void> updateLabelElementParents(@RequestParam(name = "label-list-name") String labelListName, @RequestParam(name = "label-id") Long labelId, @RequestBody List<ListElement> listElement);

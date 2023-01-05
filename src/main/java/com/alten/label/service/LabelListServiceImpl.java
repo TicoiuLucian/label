@@ -92,7 +92,8 @@ public class LabelListServiceImpl implements LabelListService {
                 .map(File::getName)
                 .toList());
 
-        labelLists.addAll(Objects.requireNonNull(restTemplate.getForObject(serverUrl, List.class)));
+        List<String> serverFileNames = Objects.requireNonNull(restTemplate.getForObject(serverUrl, List.class));
+        labelLists.addAll(serverFileNames.stream().map(element -> element.substring(4).trim()).toList());
         return labelLists;
 
     }
