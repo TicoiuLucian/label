@@ -5,6 +5,7 @@ import com.alten.label.controller.model.ListElement;
 import com.alten.label.controller.model.Metadata;
 import com.alten.label.controller.swagger.example.LabelListExample;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -125,9 +126,23 @@ public interface LabelListDoc {
             })
                                          @RequestBody LabelList labelList);
 
+    @Operation(summary = "Add list elements to label list")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - request has succeeded"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @PostMapping(value = "/list-element", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> addListElementsToLabelList(@RequestBody List<ListElement> listElements,
-                                                    @RequestParam(name = "label-list-name") String labelListName);
+    ResponseEntity<Void> addListElementsToLabelList(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Add list elements to label list",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ListElement.class),
+                    examples = {@ExampleObject(
+                            name = "Example 1",
+                            value = LabelListExample.LABEL_LIST_ELEMENT,
+                            description = "Description text")})
+            })
+                                                    @RequestBody List<ListElement> listElements,
+                                                    @Parameter(name = "label-list-name", example = "LabelList-1672836331316.json") @RequestParam(name = "label-list-name") String labelListName);
 
     @GetMapping(value = "/files")
     List<String> getAllLabelListsFileName(@RequestParam String path);
