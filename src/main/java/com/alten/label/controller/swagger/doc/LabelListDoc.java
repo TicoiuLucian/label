@@ -198,6 +198,24 @@ public interface LabelListDoc {
     @PutMapping(value = "/update-label-parents")
     ResponseEntity<Void> updateLabelElementParents(@RequestParam(name = "label-list-name") String labelListName, @RequestParam(name = "label-id") Long labelId, @RequestBody List<ListElement> listElement);
 
-    @PutMapping(value = "/update-label")
-    ResponseEntity<Void> updateLabelElement(@RequestParam(name = "label-list-name") String labelListName, @RequestParam(name = "label-id") Long labelId, @RequestBody ListElement listElement);
+    @Operation(summary = "Update label a label list")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - request has succeeded"),
+            @ApiResponse(responseCode = "404", description = "File Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
+    @PutMapping(value = "/update-label", consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> updateLabelElement(
+            @Parameter(name = "label-list-name", example = "LabelList-1672836931261.json") @RequestParam(name = "label-list-name") String labelListName,
+            @Parameter(name = "label-id", example = "3") @RequestParam(name = "label-id") Long labelId,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Update a label list",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ListElement.class),
+                            examples = {@ExampleObject(
+                                    name = "Example 1",
+                                    value = LabelListExample.LABEL_LIST_UPDATE,
+                                    description = "Description text")})
+                    })
+            @RequestBody ListElement listElement);
 }
