@@ -167,8 +167,23 @@ public interface LabelListDoc {
     @GetMapping(value = "/files")
     List<String> getAllLabelListsFileName(@RequestParam String path);
 
+    @Operation(summary = "Add metadata to label list")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - request has succeeded"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @PutMapping(value = "/metadata", consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> addMetadataToLabelList(@RequestBody Metadata metadata,
+    ResponseEntity<Void> addMetadataToLabelList(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Add metadata to label list",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Metadata.class),
+                    examples = {@ExampleObject(
+                            name = "Example 1",
+                            value = LabelListExample.METADATA_EXAMPLE,
+                            description = "Description text")})
+            })
+                                                @RequestBody Metadata metadata,
+                                                @Parameter(name = "label-list-name", example = "LabelList-1672932905930.json")
                                                 @RequestParam(name = "label-list-name") String labelListName);
 
     @PostMapping(value = "/import", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -195,8 +210,28 @@ public interface LabelListDoc {
     ResponseEntity<Void> deleteLabelFromLabelList(@Parameter(name = "labelListName", example = "LabelList-1672836931261.json") @RequestParam String labelListName,
                                                   @Parameter(name = "labelId", example = "2") @RequestParam Long labelId);
 
+
+    @Operation(summary = "Update list element parents")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - request has succeeded"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @PutMapping(value = "/update-label-parents")
-    ResponseEntity<Void> updateLabelElementParents(@RequestParam(name = "label-list-name") String labelListName, @RequestParam(name = "label-id") Long labelId, @RequestBody List<ListElement> listElement);
+    ResponseEntity<Void> updateLabelElementParents(@Parameter(name = "label-list-name", example = "LabelList-1672932905930.json")
+                                                   @RequestParam(name = "label-list-name") String labelListName,
+                                                   @Parameter(name = "label-id", example = "2")
+                                                   @RequestParam(name = "label-id") Long labelId,
+                                                   @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Update list element parents",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ListElement.class),
+                    examples = {@ExampleObject(
+                            name = "Example 1",
+                            value = LabelListExample.LABEL_LIST_UPDATE_PARENTS,
+                            description = "Description text")})
+            })
+
+                                                   @RequestBody List<ListElement> listElement);
 
     @Operation(summary = "Update label a label list")
     @ApiResponses(value = {

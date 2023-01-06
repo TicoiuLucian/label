@@ -75,4 +75,28 @@ public class LabelListExample {
                 }
             """;
 
+    public static final String METADATA_EXAMPLE = """
+                 {
+                "owner": "ALTEN",
+
+                "confidentiality": "C3",
+
+                "language": "ro",
+
+                "date": "2022-10-24T07:17:35+00:00"
+            }
+                   """;
+
+    public static final String LABEL_LIST_UPDATE_PARENTS = """
+                 [
+                    {
+                      "label_id": 2                
+                    },                
+                {
+                      "label_id": 4               
+                    }
+                  ]
+                
+            """;
+
 }
