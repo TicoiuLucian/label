@@ -11,7 +11,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ListElement {
     @JsonProperty("label_id")
-    private String labelId;
+    private Long labelId;
 
     @JsonProperty("label_content")
     private String labelContent;
