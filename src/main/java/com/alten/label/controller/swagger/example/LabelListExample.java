@@ -68,4 +68,11 @@ public class LabelListExample {
         }
         """;
 
+    public static final String LABEL_LIST_UPDATE = """
+                {
+                  "label_content": "Oui, updated",
+                  "label_desc": "Je suis sûr qu'il s'agit des mêmes, updated"
+                }
+            """;
+
 }
