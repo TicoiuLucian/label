@@ -6,7 +6,7 @@ public class DataExample {
               "dataName": "data1",
               "dataType": "TEXT_PLAIN",
               "dataLocation": "LOCAL",
-              "pathToDatasetCSV": "asdasd.csv"
+              "pathToDatasetCSV": "Provisionning/myFile.csv"
             }
             """;
 
