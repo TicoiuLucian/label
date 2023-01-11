@@ -1,6 +1,7 @@
 package com.alten.label.controller.swagger.doc;
 
 import com.alten.label.controller.model.Data;
+import com.alten.label.controller.model.DataLocation;
 import com.alten.label.controller.swagger.example.DataExample;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface DataDoc {
 
@@ -44,4 +46,14 @@ public interface DataDoc {
     ResponseEntity<Void> addLine(
             @Parameter(name = "dataName", example = "data1") String dataName,
             @Parameter(name = "line", example = "1,2,3") String line);
+
+    @Operation(summary = "Add lines to a Date file")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK - request has succeeded"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
+    ResponseEntity<Void> importLines(@Parameter(name = "dataLocation", example = "LOCAL") DataLocation dataLocation,
+                                     @Parameter(name = "dataName", example = "data1") String dataName,
+                                     @Parameter(name = "containsHeader", example = "false") Boolean containsHeader,
+                                     @Parameter(name = "file") MultipartFile file);
 }

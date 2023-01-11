@@ -61,14 +61,14 @@ public class DataServiceImpl implements DataService {
         try (OutputStream os = Files.newOutputStream(Path.of(pathToCsv), CREATE, APPEND)) {
             while (reader.ready()) {
                 String line = reader.readLine();
-                os.write(line.getBytes());
+                os.write(line.concat("\n\r").getBytes());
             }
         }
     }
 
     private void writeToCsv(String pathToCsv, String line) throws IOException {
         try (var writer = new BufferedWriter(new FileWriter(pathToCsv));) {
-            writer.write(line);
+            writer.write(line.concat("\n\r"));
         } catch (Exception e) {
             throw new IOException("Cannot write in csv file");
         }
