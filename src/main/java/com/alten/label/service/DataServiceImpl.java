@@ -1,7 +1,7 @@
 package com.alten.label.service;
 
 import com.alten.label.controller.model.Data;
-import com.alten.label.controller.model.ImportLinesRequest;
+import com.alten.label.controller.model.DataLocation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
 
 @Service
 public class DataServiceImpl implements DataService {
@@ -37,22 +40,29 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public void importLine(ImportLinesRequest request, MultipartFile attachedFile) throws IOException {
+    public void importLines(DataLocation dataLocation, String dataName, Boolean containsHeader, MultipartFile attachedFile) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            File file = new File("Provisionning\\Data\\" + request.getDataName() + ".json");
+            File file = new File("Provisionning\\Data\\" + dataName + ".json");
             Data data = mapper.readValue(file, Data.class);
             String pathToCsv = data.getPathToDatasetCSV();
-            importToCsv(pathToCsv, request, attachedFile);
+            importToCsv(pathToCsv, dataLocation, containsHeader, attachedFile);
         } catch (Exception e) {
             throw new IOException("Cannot read json file");
         }
     }
 
-    private void importToCsv(String pathToCsv, ImportLinesRequest request, MultipartFile file) throws IOException {
-        //todo  implement  separator;containsHeader;columnNumber; logic
-        try (OutputStream os = Files.newOutputStream(Path.of(pathToCsv))) {
-            os.write(file.getBytes());
+    private void importToCsv(String pathToCsv, DataLocation dataLocation, Boolean containsHeader, MultipartFile attachedFile) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(attachedFile.getInputStream()));
+
+        if (reader.ready() && containsHeader) {
+            reader.readLine(); //skip first line
+        }
+        try (OutputStream os = Files.newOutputStream(Path.of(pathToCsv), CREATE, APPEND)) {
+            while (reader.ready()) {
+                String line = reader.readLine();
+                os.write(line.getBytes());
+            }
         }
     }
 
